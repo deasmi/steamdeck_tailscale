@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Based on https://tailscale.com/blog/steam-deck/
+
 set -euo pipefail
 
 dir="$(mktemp -d)"
