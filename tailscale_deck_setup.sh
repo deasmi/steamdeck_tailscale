@@ -4,6 +4,25 @@
 
 set -euo pipefail
 
+cat <<EOF
+We are going to setup tailscale on your steam deck
+This can be used manually or set to run all the time
+and restart on reboot
+
+This will require your decl user password as this needs to be 
+done as the root user.
+
+We are not opening the read only seal, everything is kept in the
+deck user home directory
+EOF
+
+read -p "Do you want to continue? [Yy]" -n1 -r
+if [[ ! $REPLY =~ [Yy]$ ]]; then
+    exit
+fi
+
+
+
 source="$(pwd)"
 
 dir="$(mktemp -d)"
@@ -36,6 +55,24 @@ sed -i 's/\/etc\/default/\~\/.config\/default\/tailscale/g' ~/.config/systemd/us
 sed -i 's/\/usr\/sbin/\/home\/deck\/bin/g' ~/.config/systemd/user/tailscaled.service
 sed -i 's/\/usr\/bin/\/home\/deck\/bin/g' ~/.config/systemd/user/tailscaled.service
 sed -i 's/multi-user.target/default.target/g' ~/.config/systemd/user/tailscaled.service
+
+echo
+echo -n "Calling systemctl --user daemon-reload...."
+systemctl --user daemon-reload
+echo "done"
+echo
+
+cat <<EOF
+To start tailscale one issue the following command
+systemctl start tailscaled
+
+To make it start always the issue the following command
+systemctl --now enable tailscaled
+
+Then the following to connect the first time
+~/bin/tailscale up
+You will need to connect to the link provided in a web browser to login first time
+EOF
 
 popd
 rm -rf "${dir}"
