@@ -4,6 +4,8 @@
 
 set -euo pipefail
 
+source="$(pwd)"
+
 dir="$(mktemp -d)"
 pushd .
 echo "${dir}"
@@ -27,7 +29,7 @@ cp -vrf "tailscale_${version}_amd64"/tailscaled ~/bin/tailscaled
 sudo chown root:deck ~/bin/tailscaled
 sudo chmod 4750 ~/bin/tailscaled
 cp -vrf "tailscale_${version}_amd64"/systemd/tailscaled.service ~/.config/systemd/user/tailscaled.service
-cp -vrf "tailscale_${version}_amd64"/systemd/tailscaled.defaults ~/.config/default/tailscale
+cp -vrf ${source}/tailscaled.defaults ~/.config/default/tailscale
 
 sed -i 's/--port.*//g' ~/.config/systemd/user/tailscaled.service
 sed -i 's/\/etc\/default/\~\/.config\/default\/tailscale/g' ~/.config/systemd/user/tailscaled.service
