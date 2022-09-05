@@ -1,6 +1,10 @@
 Steam Deck tailscale setup script
 =================================
 
+**IMPORTANT**
+-------------
+**This is alpha level at the moment, it starts tailscale and it survives reboots. However there is no configuration/guide for how to use tailscale so YMMV**
+
 Tailscale is a zero config VPN solution ( https://tailscale.com )
 
 This script will setup tailscale on your steam deck to be persistent, that is
