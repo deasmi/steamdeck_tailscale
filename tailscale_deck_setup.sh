@@ -48,7 +48,7 @@ cp -vrf "tailscale_${version}_amd64"/tailscaled ~/bin/tailscaled
 sudo chown root:deck ~/bin/tailscaled
 sudo chmod 4750 ~/bin/tailscaled
 cp -vrf "tailscale_${version}_amd64"/systemd/tailscaled.service ~/.config/systemd/user/tailscaled.service
-cp -vrf ${source}/tailscaled.defaults ~/.config/default/tailscale
+cp -vrf ${source}/tailscaled.defaults ~/.config/default/tailscaled
 
 sed -i 's/--port.*//g' ~/.config/systemd/user/tailscaled.service
 sed -i 's/\/etc\/default/\~\/.config\/default\/tailscale/g' ~/.config/systemd/user/tailscaled.service
@@ -64,13 +64,15 @@ echo
 
 cat <<EOF
 To start tailscale one issue the following command
-systemctl start tailscaled
+systemctl --user start tailscaled
 
 To make it start always the issue the following command
-systemctl --now enable tailscaled
+systemctl --user --now enable tailscaled
 
 Then the following to connect the first time
-~/bin/tailscale up
+~/bin/tailscale up --reset --accept-dns=false
+--reset will make sure if you have run this before somehow you reset to defaults
+--accpt-dns=false disables any dns managemnet from tailscale, I have had issue with cloud sync with this on
 You will need to connect to the link provided in a web browser to login first time
 EOF
 
